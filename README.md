@@ -7,11 +7,11 @@ This is a simple ping-pong example, along with a choice example, using slash com
 
 main.cpp
 ```c++
+#include "MyBot.h" //This file is REQUIRED by DPP
 #include <dpp/dpp.h>
-#include <cstdlib>
-#include "command.hpp"
-#include "ping.hpp"
-#include "greeting.hpp"
+#include <iostream>
+#include <unordered_map>
+#include "commands.hpp"
  
 
 
@@ -36,6 +36,10 @@ int main() {
 
 commands.hpp
 ```c++
+#include "command.hpp"
+#include <string>
+#include <vector>
+#include <unordered_map>
 EBW::Command ping = {
 	.id = "ping",
 	.display = "Ping",
