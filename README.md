@@ -3,12 +3,41 @@ Everlasting Bot Wrapper for D++
 
 This is a simple ping-pong example, along with a choice example, using slash commands with the new Everlasting Bot Wrapper.
 (The EBW only works in C++20 and up, so it is an optional feature)
+
+
+main.cpp
 ```c++
 #include <dpp/dpp.h>
 #include <cstdlib>
-#include <dpp/command.hpp>
+#include "command.hpp"
+#include "ping.hpp"
+#include "greeting.hpp"
  
+std::vector<EBW::Command> registered_commands = {
+	ping, greet
+};
 
+int main() {
+    dpp::cluster bot(std::getenv("BOT_TOKEN"));
+ 
+    bot.on_slashcommand([](auto event) {
+        std::string command_name = event.command.get_command_name();
+        EBW::Command& command = EBW::command_map[command_name];
+        EBW::Cmd(bot, event, command);
+    });
+ 
+    bot.on_ready([&bot](auto event) {
+        if (dpp::run_once<struct register_bot_commands>()) {
+            EBW::init_commands(bot, registered_commands);
+        }
+    });
+ 
+    bot.start(dpp::st_wait);
+}
+```
+
+ping.hpp
+```c++
 EBW::Command ping = {
 	.id = "ping",
 	.display = "Ping",
@@ -18,6 +47,11 @@ EBW::Command ping = {
 		event.reply(response);
 	}
 };
+```
+
+
+greet.hpp
+```c++
 EBW::Command greet = {
 	.id = "greet",
 	.display = "Choose a greeting!",
@@ -48,26 +82,4 @@ EBW::Command greet = {
 		std::string choice = cmd.arg["greeting"];
 		event.reply(cmd.cmd.argument_map["greeting"].option_map[choice].response);
 	}
-};
-
-std::vector<EBW::Command> registered_commands = {
-	ping, greet
-};
-int main() {
-    dpp::cluster bot(std::getenv("BOT_TOKEN"));
- 
-    bot.on_slashcommand([](auto event) {
-        std::string command_name = event.command.get_command_name();
-        EBW::Command& command = EBW::command_map[command_name];
-        EBW::Cmd(bot, event, command);
-    });
- 
-    bot.on_ready([&bot](auto event) {
-        if (dpp::run_once<struct register_bot_commands>()) {
-            EBW::init_commands(bot, registered_commands);
-        }
-    });
- 
-    bot.start(dpp::st_wait);
-}
-```
+};```
