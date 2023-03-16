@@ -18,7 +18,7 @@ std::vector<EBW::Command> registered_commands = {
 };
 
 int main() {
-    dpp::cluster bot("BOT_TOKEN);
+    dpp::cluster bot("BOT_TOKEN");
  
     bot.on_slashcommand([](auto event) {
         std::string command_name = event.command.get_command_name();
