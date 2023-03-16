@@ -13,9 +13,7 @@ main.cpp
 #include "ping.hpp"
 #include "greeting.hpp"
  
-std::vector<EBW::Command> registered_commands = {
-	ping, greet
-};
+
 
 int main() {
     dpp::cluster bot("BOT_TOKEN");
@@ -36,7 +34,7 @@ int main() {
 }
 ```
 
-ping.hpp
+commands.hpp
 ```c++
 EBW::Command ping = {
 	.id = "ping",
@@ -47,11 +45,6 @@ EBW::Command ping = {
 		event.reply(response);
 	}
 };
-```
-
-
-greet.hpp
-```c++
 EBW::Command greet = {
 	.id = "greet",
 	.display = "Choose a greeting!",
@@ -82,4 +75,9 @@ EBW::Command greet = {
 		std::string choice = cmd.arg["greeting"];
 		event.reply(cmd.cmd.argument_map["greeting"].option_map[choice].response);
 	}
-};```
+};
+std::vector<EBW::Command> registered_commands = {
+	ping, greet
+};
+```
+
