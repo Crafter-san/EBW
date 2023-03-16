@@ -1,4 +1,4 @@
-#include "command.hpp"
+#include "command.hpp" //THIS is the command.hpp file that contains EBW.
 #include <string>
 #include <vector>
 #include <unordered_map>
