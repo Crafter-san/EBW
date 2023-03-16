@@ -9,16 +9,16 @@ This is a simple ping-pong example, along with a choice example, using slash com
 #include <dpp/command.hpp>
  
 
-dpp::ebw::Command ping = {
+EBW::Command ping = {
 	.id = "ping",
 	.display = "Ping",
 	.response = "Pong!",
-	.execute = [](dpp::cluster& bot, const dpp::slashcommand_t& event, dpp::ebw::Evt cmd) {
+	.execute = [](dpp::cluster& bot, const dpp::slashcommand_t& event, EBW::Evt cmd) {
 		std::string response = cmd.cmd.response;
 		event.reply(response);
 	}
 };
-dpp::ebw::Command greet = {
+EBW::Command greet = {
 	.id = "greet",
 	.display = "Choose a greeting!",
 	.arguments = {
@@ -44,13 +44,13 @@ dpp::ebw::Command greet = {
 			}
 		}
 	},
-	.execute = [](dpp::cluster& bot, const dpp::slashcommand_t& event, dpp::ebw::Evt cmd) {
+	.execute = [](dpp::cluster& bot, const dpp::slashcommand_t& event, EBW::Evt cmd) {
 		std::string choice = cmd.arg["greeting"];
 		event.reply(cmd.cmd.argument_map["greeting"].option_map[choice].response);
 	}
 };
 
-std::vector<dpp::ebw::Command> registered_commands = {
+std::vector<EBW::Command> registered_commands = {
 	ping, greet
 };
 int main() {
@@ -58,13 +58,13 @@ int main() {
  
     bot.on_slashcommand([](auto event) {
         std::string command_name = event.command.get_command_name();
-        dpp::ebw::Command& command = dpp::ebw::command_map[command_name];
-        dpp::ebw::Cmd(bot, event, command);
+        EBW::Command& command = EBW::command_map[command_name];
+        EBW::Cmd(bot, event, command);
     });
  
     bot.on_ready([&bot](auto event) {
         if (dpp::run_once<struct register_bot_commands>()) {
-            dpp::ebw::init_commands(bot, registered_commands);
+            EBW::init_commands(bot, registered_commands);
         }
     });
  
